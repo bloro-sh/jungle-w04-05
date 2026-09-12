@@ -20,7 +20,7 @@ typedef struct _linkedlist{
 	int size;
 	ListNode *head;
 } LinkedList;			// You should not change the definition of LinkedList
-
+//링크드리스트 구조체 안에 head가 있고 리스트 맨 처음 시작 노드가 어디지 
 
 ///////////////////////// function prototypes ////////////////////////////////////
 
@@ -32,7 +32,7 @@ void removeAllItems(LinkedList *ll);
 ListNode *findNode(LinkedList *ll, int index);
 int insertNode(LinkedList *ll, int index, int value);
 int removeNode(LinkedList *ll, int index);
-
+//함수 변경하지말기
 
 //////////////////////////// main() //////////////////////////////////////////////
 
@@ -42,6 +42,7 @@ int main()
 	int c, i, j;
 	c = 1;
 
+	//링크드 리스트1을 빈리스트로 초기화
 	//Initialize the linked list 1 as an empty linked list
 	ll.head = NULL;
 	ll.size = 0;
@@ -54,30 +55,30 @@ int main()
 	while (c != 0)
 	{
 		printf("\nPlease input your choice(1/2/3/0): ");
-		scanf("%d", &c);
+		scanf("%d", &c);//선택을 입력해주세요
 
 		switch (c)
 		{
 		case 1:
 			printf("Input an integer that you want to add to the linked list: ");
-			scanf("%d", &i);
+			scanf("%d", &i);//연결리스트에추가할 정수를 입력하세요
 			j = insertSortedLL(&ll, i);
 			printf("The resulting linked list is: ");
-			printList(&ll);
+			printList(&ll);//결과로 생성된 리스트는 다음과같다
 			break;
 		case 2:
 			printf("The value %d was added at index %d\n", i, j);
-			break;
+			break;//값i가 추가된 인덱스위치에 추가되었습니다
 		case 3:
 			printf("The resulting sorted linked list is: ");
-			printList(&ll);
+			printList(&ll);//결과로 생성된 정렬리스트는~
 			removeAllItems(&ll);
 			break;
 		case 0:
 			removeAllItems(&ll);
 			break;
 		default:
-			printf("Choice unknown;\n");
+			printf("Choice unknown;\n");//선택사항?
 			break;
 		}
 
@@ -88,9 +89,31 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int insertSortedLL(LinkedList *ll, int item)
-{
-	/* add your code here */
+int insertSortedLL(LinkedList *ll, int item) {//몇번째 인덱스에 넣어야되는지
+	
+	ListNode *temp = ll->head;//현재 검사할 노드를 가리키는 포인터
+	int index = 0;
+
+	while(temp!=NULL){
+
+		if(temp->item == item){
+			return -1;//값이같을때
+		}
+		if(temp->item >item){
+			break;//들어갈 위치 찾았을때
+		}
+		else{
+			temp= temp->next;
+			index++;//다음 노드로 이동
+		}
+	}
+
+	insertNode(ll,index,item);
+	return index;
+
+
+	//몇번째 인덱스에 넣어야될지? 오름차순 정렬후에 인덱스 번호 알아내기
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
