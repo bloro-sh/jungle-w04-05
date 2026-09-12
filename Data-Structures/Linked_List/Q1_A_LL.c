@@ -109,7 +109,7 @@ int insertSortedLL(LinkedList *ll, int item) {//몇번째 인덱스에 넣어야
 	}
 
 	insertNode(ll,index,item);
-	return index;
+	return index;//노드 삽입 인덱스반환
 
 
 	//몇번째 인덱스에 넣어야될지? 오름차순 정렬후에 인덱스 번호 알아내기

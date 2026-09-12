@@ -65,14 +65,14 @@ int main()
 		{
 		case 1:
 			printf("Input an integer that you want to add to the linked list 1: ");
-			scanf("%d", &i);
+			scanf("%d", &i);//연결리스트에 추가하고싶은 정수
 			j = insertNode(&ll1, ll1.size, i);
 			printf("Linked list 1: ");
 			printList(&ll1);
 			break;
 		case 2:
 			printf("Input an integer that you want to add to the linked list 2: ");
-			scanf("%d", &i);
+			scanf("%d", &i);//연결리스트2에 추가하고싶은 정수
 			j = insertNode(&ll2, ll2.size, i);
 			printf("Linked list 2: ");
 			printList(&ll2);
@@ -80,7 +80,7 @@ int main()
 		case 3:
 		    printf("The resulting linked lists after merging the given linked list are:\n");
 			alternateMergeLinkedList(&ll1, &ll2); // You need to code this function
-			printf("The resulting linked list 1: ");
+			printf("The resulting linked list 1: ");//연결리스트 병합후는 이렇다
 			printList(&ll1);
 			printf("The resulting linked list 2: ");
 			printList(&ll2);
@@ -102,8 +102,40 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
-{
-    /* add your code here */
+{//노드 2개가 비어있으면 합칠게없음
+	if (ll1 == NULL ||ll2 == NULL|| ll1->head == NULL|| ll2->head == NULL )
+		return;
+
+	ListNode *p1 = ll1->head;
+	ListNode *p2 = ll2->head;
+	ListNode *p1Next, *p2Next; //2개 포인터변수 만듬
+
+	while(p1 != NULL && p2 !=NULL){
+		p1Next = p1->next;//노드위치 미리 저장해두기
+		p2Next = p2->next;
+
+		p1->next = p2;
+		//p1을 p2로 합침
+
+		//임시저장한 p1을 p2뒤에 붙임
+		if(p1!=NULL){
+			p2->next=p1Next;
+		}
+		//노드만큼 인덱스 사이즈 늘리기
+		ll1->size++;
+		ll2->size--;
+
+		//다음위치로 이동
+		p1=p1Next;
+		p2=p2Next;
+
+	}
+
+	//남은 p2가 없으면 Null로 만들고 남은노드가 있으면 ll2 첫번째 넣음
+	//ll2 입장에선 주소를 새로 업데이트 해줘야된다 (1.ll2노드가 많을때 2.ll2가 다 가고 ll1이 남을때)
+	ll2->head = p2;
+
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -171,6 +203,7 @@ int insertNode(LinkedList *ll, int index, int value){
 		return -1;
 
 	// If empty list or inserting first node, need to update head pointer
+	//리스트가 비어있거나 첫버째 노드 삽입시에 head포인터 업데이트 필요
 	if (ll->head == NULL || index == 0){
 		cur = ll->head;
 		ll->head = malloc(sizeof(ListNode));
