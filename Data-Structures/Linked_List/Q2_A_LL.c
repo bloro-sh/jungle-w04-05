@@ -99,13 +99,41 @@ int main()
 	return 0;
 }
 
+
 //////////////////////////////////////////////////////////////////////////////////
 
 void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
 {//노드 2개가 비어있으면 합칠게없음
 	if (ll1 == NULL ||ll2 == NULL|| ll1->head == NULL|| ll2->head == NULL )
 		return;
+	
+	ListNode *pre,*pre2, *ll1_cur, *ll2_cur;
+	ll1_cur = ll1->head;
+	ll2_cur = ll2->head;
 
+	while (ll1_cur != NULL && ll2_cur != NULL) {
+		pre = ll1_cur->next;//pre를 ll1의 다음노드에 저장(다음노드 2 저장)pre->2
+		pre2 = ll2_cur->next;//pre2는 ll2의 다음노드에 저장 ->5
+			
+		ll1_cur->next = ll2_cur;//ll2가 ll1으로 넣고 1->4
+		ll2_cur->next = pre; //4가리킨 ll2를 옆에 2를 넣고
+			
+		if(pre != NULL){
+			ll1_cur = pre; // 1을 가리키고있는 ll1_cul을 pre인 2로 가리키고
+			ll2_cur = pre2;//4를 가리키는 ll2_cul을 pre5로 가리키게 하기
+		}else{//pre==null
+			ll1_cur = NULL;
+			ll2_cur=pre2;
+		}
+
+			
+			ll1->size++;
+			ll2->size--;
+			}
+		ll2->head = ll2_cur;//ll2업데이트
+		}
+
+    /*
 	ListNode *p1 = ll1->head;
 	ListNode *p2 = ll2->head;
 	ListNode *p1Next, *p2Next; //2개 포인터변수 만듬
@@ -134,9 +162,7 @@ void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
 	//남은 p2가 없으면 Null로 만들고 남은노드가 있으면 ll2 첫번째 넣음
 	//ll2 입장에선 주소를 새로 업데이트 해줘야된다 (1.ll2노드가 많을때 2.ll2가 다 가고 ll1이 남을때)
 	ll2->head = p2;
-
-
-}
+	*/
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -197,8 +223,8 @@ ListNode *findNode(LinkedList *ll, int index){
 
 int insertNode(LinkedList *ll, int index, int value){
 
-	ListNode *pre, *cur;
-
+	ListNode *pre, *cur; //포인터 새로만듬
+	//
 	if (ll == NULL || index < 0 || index > ll->size + 1)
 		return -1;
 
