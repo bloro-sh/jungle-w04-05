@@ -88,7 +88,32 @@ int main()
 
 int moveMaxToFront(ListNode **ptrHead)
 {
-    for(int)
+	if (*ptrHead == NULL)
+    return 0;//빈리스트일때
+
+	ListNode *cur,*max,*pre,*maxpre;
+
+	pre = NULL;//max전의 값을 저장할 변수(처음값은 NULL로 해야 자연스럽다)
+	cur = (*ptrHead);//cur ->ptrhead->llhead->값 (앞으로이동)
+	max = (*ptrHead);
+	maxpre = NULL;
+
+	while(cur != NULL){//순회
+		if(cur->item > max->item){
+			max = cur;
+			maxpre = pre;//max 바로 앞 노드값 저장
+
+			}
+	pre=cur;//한칸씩 이동
+	cur = cur->next;
+	}
+    if (max == *ptrHead){
+        return 0;//첫번째 최대값이면 이동x 
+	}
+
+	maxpre->next = max->next;//큰값 전의 값과 그다음값 연결
+	max->next = *ptrHead;//최대큰값을 첫번째 노드에 연결
+	*ptrHead = max;//첫번째 노드 연결한걸 max로 바꾸기
 }
 
 //////////////////////////////////////////////////////////////////////////////////
