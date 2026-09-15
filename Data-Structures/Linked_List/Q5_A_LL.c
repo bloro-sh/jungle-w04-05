@@ -102,7 +102,23 @@ int main()
 
 void frontBackSplitLinkedList(LinkedList *ll, LinkedList *resultFrontList, LinkedList *resultBackList)
 {
-	/* add your code here */
+	if(ll == NULL || ll->head == NULL)//리스트가 없으면 종료
+		return;
+
+	ListNode *pre;
+	pre = ll->head;
+	int frontsize = (ll->size+1)/2;
+	int backsize = ll->size - frontsize;
+	
+	for(int i = 0; i<frontsize; i++){//홀수만 구함
+		insertNode(resultFrontList,resultFrontList->size,pre->item);
+		pre=pre->next;//앞으로 이동
+	}
+	for(int i=0; i <backsize;i++){
+		insertNode(resultBackList,resultBackList->size,pre->item);
+		pre=pre->next;//앞으로 이동
+	}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
