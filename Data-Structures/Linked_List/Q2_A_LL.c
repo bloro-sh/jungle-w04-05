@@ -129,7 +129,7 @@ void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
 			
 			ll1->size++;
 			ll2->size--;
-			}
+		}
 		ll2->head = ll2_cur;//ll2업데이트
 		}
 
