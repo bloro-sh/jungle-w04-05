@@ -1,0 +1,291 @@
+//////////////////////////////////////////////////////////////////////////////////
+
+/* CE1007/CZ1007 Data Structures
+Lab Test: Section A - Linked List Questions
+Purpose: Implementing the required functions for Question 2 */
+
+//////////////////////////////////////////////////////////////////////////////////
+
+#include <stdio.h>
+#include <stdlib.h>
+
+//////////////////////////////////////////////////////////////////////////////////
+
+typedef struct _listnode
+{
+	int item;
+	struct _listnode *next;
+} ListNode;			// You should not change the definition of ListNode
+
+typedef struct _linkedlist
+{
+	int size;
+	ListNode *head;
+} LinkedList;			// You should not change the definition of LinkedList
+
+
+//////////////////////// function prototypes /////////////////////////////////////
+
+// You should not change the prototype of this function
+void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2);
+
+void printList(LinkedList *ll);
+void removeAllItems(LinkedList *ll);
+ListNode *findNode(LinkedList *ll, int index);
+int insertNode(LinkedList *ll, int index, int value);
+int removeNode(LinkedList *ll, int index);
+
+
+//////////////////////////// main() //////////////////////////////////////////////
+
+int main()
+{
+	LinkedList ll1, ll2;
+	int c, i, j;
+	c = 1;
+	//Initialize the linked list 1 as an empty linked list
+	ll1.head = NULL;
+	ll1.size = 0;
+
+	//Initialize the linked list 2 as an empty linked list
+	ll2.head = NULL;
+	ll2.size = 0;
+
+	printf("1: Insert an integer to the linked list 1:\n");
+	printf("2: Insert an integer to the linked list 2:\n");
+	printf("3: Create the alternate merged linked list:\n");
+	printf("0: Quit:\n");
+
+	while (c != 0)
+	{
+		printf("Please input your choice(1/2/3/0): ");
+		scanf("%d", &c);
+
+		switch (c)
+		{
+		case 1:
+			printf("Input an integer that you want to add to the linked list 1: ");
+			scanf("%d", &i);//연결리스트에 추가하고싶은 정수
+			j = insertNode(&ll1, ll1.size, i);
+			printf("Linked list 1: ");
+			printList(&ll1);
+			break;
+		case 2:
+			printf("Input an integer that you want to add to the linked list 2: ");
+			scanf("%d", &i);//연결리스트2에 추가하고싶은 정수
+			j = insertNode(&ll2, ll2.size, i);
+			printf("Linked list 2: ");
+			printList(&ll2);
+			break;
+		case 3:
+		    printf("The resulting linked lists after merging the given linked list are:\n");
+			alternateMergeLinkedList(&ll1, &ll2); // You need to code this function
+			printf("The resulting linked list 1: ");//연결리스트 병합후는 이렇다
+			printList(&ll1);
+			printf("The resulting linked list 2: ");
+			printList(&ll2);
+			removeAllItems(&ll1);
+			removeAllItems(&ll2);
+			break;
+		case 0:
+			removeAllItems(&ll1);
+			removeAllItems(&ll2);
+			break;
+		default:
+			printf("Choice unknown;\n");
+			break;
+		}
+	}
+	return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+
+void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
+{//노드 2개가 비어있으면 합칠게없음
+	if (ll1 == NULL ||ll2 == NULL|| ll1->head == NULL|| ll2->head == NULL )
+		return;
+	
+	ListNode *pre,*pre2, *ll1_cur, *ll2_cur;
+	ll1_cur = ll1->head;
+	ll2_cur = ll2->head;
+
+	while (ll1_cur != NULL && ll2_cur != NULL) {
+		pre = ll1_cur->next;//pre를 ll1의 다음노드에 저장(다음노드 2 저장)pre->2
+		pre2 = ll2_cur->next;//pre2는 ll2의 다음노드에 저장 ->5
+			
+		ll1_cur->next = ll2_cur;//ll2가 ll1으로 넣고 1->4
+		ll2_cur->next = pre; //4가리킨 ll2를 옆에 2를 넣고
+			
+		if(pre != NULL){
+			ll1_cur = pre; // 1을 가리키고있는 ll1_cul을 pre인 2로 가리키고
+			ll2_cur = pre2;//4를 가리키는 ll2_cul을 pre5로 가리키게 하기
+		}else{//pre==null
+			ll1_cur = NULL;
+			ll2_cur=pre2;
+		}
+
+			
+			ll1->size++;
+			ll2->size--;
+		}
+		ll2->head = ll2_cur;//ll2업데이트
+		}
+
+    /*
+	ListNode *p1 = ll1->head;
+	ListNode *p2 = ll2->head;
+	ListNode *p1Next, *p2Next; //2개 포인터변수 만듬
+
+	while(p1 != NULL && p2 !=NULL){
+		p1Next = p1->next;//노드위치 미리 저장해두기
+		p2Next = p2->next;
+
+		p1->next = p2;
+		//p1을 p2로 합침
+
+		//임시저장한 p1을 p2뒤에 붙임
+		if(p1!=NULL){
+			p2->next=p1Next;
+		}
+		//노드만큼 인덱스 사이즈 늘리기
+		ll1->size++;
+		ll2->size--;
+
+		//다음위치로 이동
+		p1=p1Next;
+		p2=p2Next;
+
+	}
+
+	//남은 p2가 없으면 Null로 만들고 남은노드가 있으면 ll2 첫번째 넣음
+	//ll2 입장에선 주소를 새로 업데이트 해줘야된다 (1.ll2노드가 많을때 2.ll2가 다 가고 ll1이 남을때)
+	ll2->head = p2;
+	*/
+
+///////////////////////////////////////////////////////////////////////////////////
+
+void printList(LinkedList *ll){
+
+	ListNode *cur;
+	if (ll == NULL)
+		return;
+	cur = ll->head;
+
+	if (cur == NULL)
+		printf("Empty");
+	while (cur != NULL)
+	{
+		printf("%d ", cur->item);
+		cur = cur->next;
+	}
+	printf("\n");
+}
+
+
+void removeAllItems(LinkedList *ll)
+{
+	ListNode *cur = ll->head;
+	ListNode *tmp;
+
+	while (cur != NULL){
+		tmp = cur->next;
+		free(cur);
+		cur = tmp;
+	}
+	ll->head = NULL;
+	ll->size = 0;
+}
+
+
+ListNode *findNode(LinkedList *ll, int index){
+
+	ListNode *temp;
+
+	if (ll == NULL || index < 0 || index >= ll->size)
+		return NULL;
+
+	temp = ll->head;
+
+	if (temp == NULL || index < 0)
+		return NULL;
+
+	while (index > 0){
+		temp = temp->next;
+		if (temp == NULL)
+			return NULL;
+		index--;
+	}
+
+	return temp;
+}
+
+int insertNode(LinkedList *ll, int index, int value){
+
+	ListNode *pre, *cur; //포인터 새로만듬
+	//
+	if (ll == NULL || index < 0 || index > ll->size + 1)
+		return -1;
+
+	// If empty list or inserting first node, need to update head pointer
+	//리스트가 비어있거나 첫버째 노드 삽입시에 head포인터 업데이트 필요
+	if (ll->head == NULL || index == 0){
+		cur = ll->head;
+		ll->head = malloc(sizeof(ListNode));
+		ll->head->item = value;
+		ll->head->next = cur;
+		ll->size++;
+		return 0;
+	}
+
+
+	// Find the nodes before and at the target position
+	// Create a new node and reconnect the links
+	if ((pre = findNode(ll, index - 1)) != NULL){
+		cur = pre->next;
+		pre->next = malloc(sizeof(ListNode));
+		pre->next->item = value;
+		pre->next->next = cur;
+		ll->size++;
+		return 0;
+	}
+
+	return -1;
+}
+
+
+int removeNode(LinkedList *ll, int index){
+
+	ListNode *pre, *cur;
+
+	// Highest index we can remove is size-1
+	if (ll == NULL || index < 0 || index >= ll->size)
+		return -1;
+
+	// If removing first node, need to update head pointer
+	if (index == 0){
+		cur = ll->head->next;
+		free(ll->head);
+		ll->head = cur;
+		ll->size--;
+
+		return 0;
+	}
+
+	// Find the nodes before and after the target position
+	// Free the target node and reconnect the links
+	if ((pre = findNode(ll, index - 1)) != NULL){
+
+		if (pre->next == NULL)
+			return -1;
+
+		cur = pre->next;
+		pre->next = cur->next;
+		free(cur);
+		ll->size--;
+		return 0;
+	}
+
+	return -1;
+}
